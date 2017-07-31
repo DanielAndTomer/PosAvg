@@ -23,21 +23,9 @@ def startDrone():
 
 
     def animate ():
-        imagelist= ['drone (1).gif', 'drone (2).gif', 'drone (3).gif', 'drone (4).gif', 'drone (5).gif',
-                    'drone (6).gif', 'drone (7).gif', 'drone (8).gif', 'drone (9).gif', 'drone (10).gif',
-                    'drone (11).gif', 'drone (12).gif', 'drone (13).gif', 'drone (14).gif', 'drone (15).gif',
-                    'drone (16).gif', 'drone (17).gif', 'drone (18).gif', 'drone (19).gif', 'drone (20).gif',
-                    'drone (21).gif', 'drone (22).gif', 'drone (23).gif', 'drone (24).gif', 'drone (25).gif',
-                    'drone (26).gif', 'drone (27).gif', 'drone (28).gif', 'drone (29).gif', 'drone (30).gif',
-                    'drone (31).gif', 'drone (32).gif', 'drone (33).gif', 'drone (34).gif', 'drone (35).gif',
-                    'drone (36).gif', 'drone (37).gif', 'drone (38).gif', 'drone (39).gif', 'drone (40).gif',
-                    'drone (41).gif', 'drone (42).gif', 'drone (43).gif', 'drone (44).gif', 'drone (45).gif',
-                    'drone (46).gif', 'drone (47).gif', 'drone (48).gif', 'drone (49).gif', 'drone (50).gif',
-                    'drone (51).gif', 'drone (52).gif', 'drone (53).gif', 'drone (54).gif', 'drone (55).gif',
-                    'drone (56).gif', 'drone (57).gif', 'drone (58).gif', 'drone (59).gif', 'drone (60).gif',
-                    'drone (61).gif', 'drone (62).gif', 'drone (63).gif', 'drone (64).gif', 'drone (65).gif',
-                    'drone (66).gif', 'drone (67).gif', 'drone (68).gif', 'drone (69).gif', 'drone (70).gif',
-                    'drone (71).gif', 'drone (72).gif', 'drone (73).gif', 'drone (74).gif', 'drone (75).gif']
+        imagelist=[]
+        for i in range (1,76):
+            imagelist.append('Images/drone ('+str(i)+').gif')
            
                # extract width and height info
         photo = ImageTk.PhotoImage(file=imagelist[0])
@@ -71,7 +59,7 @@ def startDrone():
     thread1.start()
 
 def background_init(frame):
-    load = Image.open("background.png")
+    load = Image.open("Images/background.png")
     render = ImageTk.PhotoImage(load)
 
     # labels can be text or images
@@ -97,7 +85,7 @@ class AvgPos(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         #Chief icon:
-        self.iconbitmap('chief.ico')
+        self.iconbitmap('Images/chief.ico')
 
         #Window label:
         self.title("Average Position Generator")
@@ -192,13 +180,13 @@ class StartPage(tk.Frame):
         # start button
         button = ttk.Button(self, text="",
                             command=onClick_start)
-        button = set_btn_bg(button, "start_btn.png")
+        button = set_btn_bg(button, "Images/start_btn.png")
         button.place(x=200,y=320)
 
         # quit button
         button2 = ttk.Button(self, text="",
                             command=quit)
-        button2=set_btn_bg(button2,"quit_btn.png")
+        button2=set_btn_bg(button2,"Images/quit_btn.png")
         button2.place(x=310 , y=320)
 
 
@@ -223,13 +211,13 @@ class inProgress(tk.Frame):
         # back button
         button = ttk.Button(self, text="back",
                             command=lambda: controller.show_frame(Stopped))
-        button = set_btn_bg(button, "back_btn.png")
+        button = set_btn_bg(button, "Images/back_btn.png")
         button.place(x=200,y=320)
 
         # quit button
         button2 = ttk.Button(self, text="Quit",
                              command=quit)
-        button2 = set_btn_bg(button2, "quit_btn.png")
+        button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=310 , y=320)
     
 
@@ -249,14 +237,15 @@ class Stopped(tk.Frame):
         label.place(x=225, y=95)
 
         # start again button
-        button1 = ttk.Button(self, text="start again",
+        button1 = ttk.Button(self,
                             command=lambda: controller.show_frame(StartPage))
+        button1 = set_btn_bg(button1, "Images/start_again_btn.png")
         button1.place(x=220,y=320)
 
         # quit button
-        button2 = ttk.Button(self, text="Quit",
+        button2 = ttk.Button(self,
                              command=quit)
-        button2 = set_btn_bg(button2, "quit_btn.png")
+        button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=320 , y=320)
 
 
