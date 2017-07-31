@@ -138,18 +138,18 @@ class StartPage(tk.Frame):
                                 "*Make sure the mast DEBUG cable is connected\n",
                          justify="left")
         label.config(bg="white")
-        label.place(x=180 , y=95)
+        label.place(x=180 , y=70)
 
         # radio buttons label
         radioLabel=tk.Label(self, text="Choose one option:\n")
         radioLabel.config(bg="white",font = "Arial 12 bold underline")
-        radioLabel.place(x=215 , y=140)
+        radioLabel.place(x=220 , y=120)
 
         # radio buttons setup:
         timeChoises = [
-            ("Seconds", 3),
-            ("Minutes", 2),
-            ("Hours", 1),
+            ("Seconds\n(40-400)", 3),
+            ("Minutes\n(1-60)", 2),
+            ("Hours\n(0.1-48)", 1),
         ]
         v = tk.IntVar()
         v.set(1)
@@ -165,7 +165,7 @@ class StartPage(tk.Frame):
                         command=getV)
             x = int(val * 100)+50
             radio.config(bg="white")
-            radio.place(x=x, y=185)
+            radio.place(x=x, y=150)
 
         # text box
         value=tk.StringVar()
@@ -176,6 +176,13 @@ class StartPage(tk.Frame):
         txtLable.place(x=220, y=255)
         txtBox=tk.Entry(self)
         txtBox.place(x=270, y=255)
+
+        txtLable2=tk.Label(self, text="COM Number:")
+        txtLable2.config(font="Arial 9 bold underline", bg="white")
+        txtLable2.place(x=178, y=230)
+        txtBox=tk.Entry(self)
+        txtBox.place(x=270, y=230)
+
 
         # start button
         button = ttk.Button(self, text="",
