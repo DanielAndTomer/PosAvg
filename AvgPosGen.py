@@ -4,9 +4,10 @@ import re
 from datetime import datetime
 import sys
 
-
-
-f = open("POSAVE LOG.txt", "a")  # Make a log file
+def logWrite(msg):
+    f = open("POSAVE LOG.txt", "a")  # Make a log file
+    f.write(str(datetime.now()) + msg)
+    f.close()
 
 
 def readValue(ser): # Reads Novatel commands
