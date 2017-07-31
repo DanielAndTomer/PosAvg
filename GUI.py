@@ -8,6 +8,7 @@ import AvgPosGen as avg
 from _thread import start_new_thread
 import threading
 
+avg.logOpen()
 def startDrone():
     class myThread (threading.Thread):
         def __init__(self, threadID, name, counter):
@@ -19,8 +20,6 @@ def startDrone():
             print ("Starting " + self.name)
             animate ()
             print ("Exiting " + self.name)
-
-
 
     def animate ():
         imagelist=[]
@@ -118,16 +117,17 @@ class StartPage(tk.Frame):
                 value = int(txtBox.get())
                 controller.show_frame(inProgress)
                 startDrone()
-##                if value>0:
-##                    
-##                    try:
-##                        avg.start_pos(opt,value)
-##                    except Exception:
-##                        print("Connection Problem!")
-##                else:
-##                    print("only positive numbers")
+                if value>0:
+                    try:
+                        avg.start_pos(opt,value,"COM10")
+                    except Exception:
+                        controller.show_frame(Stopped)
+                else:
+                    avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
+                    controller.show_frame(Stopped)
             except Exception:
-                print("unaccepted value")
+                avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
+                controller.show_frame(Stopped)
 
         tk.Frame.__init__(self, parent)
 
@@ -232,9 +232,11 @@ class Stopped(tk.Frame):
         background_init(self)
 
         # "you hav stoped" label:
-        label = tk.Label(self, text="You have stoped the process ...\n")
+        label = tk.Label(self, text="The process has stopped for any reason\n"
+                                    "You may close the window, reopen it or press \"try again\"\n"
+                                    "Make sure you enter the right values in your next try...")
         label.config(bg="white", fg="red", font="Times 12 bold")
-        label.place(x=225, y=95)
+        label.place(x=120, y=95)
 
         # start again button
         button1 = ttk.Button(self,

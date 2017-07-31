@@ -3,7 +3,11 @@ import time
 import re
 from datetime import datetime
 import sys
-
+def logOpen():
+    f = open("POSAVE LOG.txt", "a")
+    f.write('\n\n---------------------------------------------------------------------------------\n')
+    f.write(str(datetime.now()) + "  " + 'Script opened\n')
+    
 def logWrite(msg):
     f = open("POSAVE LOG.txt", "a")  # Make a log file
     f.write(str(datetime.now()) + msg)
@@ -98,18 +102,21 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
     else:
         print('not good')
 
-def start_pos(opt,time_value):
+def start_pos(opt,time_value,COM):
 
-    f.write('\n\n---------------------------------------------------------------------------------\n')
-    f.write(str(datetime.now()) + "  " + 'Script opened\n')
     print ("[DEBUG]:  Values has been past to the script.")     #DEBUG MASSEGE
 
     with serial.Serial() as ser:
 
         ser.baudrate = 115200
-        ser.port = 'COM223'
-        ser.open()
-        print("[DEBUG]:  Connected to Novatel.")  # DEBUG MASSEGE
+        ser.port = COM
+        try:
+            ser.open()
+            logWrite("  [DEBUG]: onnected to Novatel.\n") # DEBUG MASSEGE
+        except Exception:
+            logWrite("  [ERROR]: Connection error - Enable to connect to Novatel.\n") # DEBUG MASSEGE
+            return None
+            
 
         print('1')
         time_list = timeSet(opt,time_value)
