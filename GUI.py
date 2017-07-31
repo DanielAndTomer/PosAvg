@@ -138,12 +138,12 @@ class StartPage(tk.Frame):
                                 "*Make sure the mast DEBUG cable is connected\n",
                          justify="left")
         label.config(bg="white")
-        label.place(x=180 , y=95)
+        label.place(x=180 , y=70)
 
         # radio buttons label
         radioLabel=tk.Label(self, text="Choose one option:\n")
         radioLabel.config(bg="white",font = "Arial 12 bold underline")
-        radioLabel.place(x=215 , y=140)
+        radioLabel.place(x=220 , y=120)
 
         # radio buttons setup:
         timeChoises = [
