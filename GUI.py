@@ -249,13 +249,13 @@ class Stopped(tk.Frame):
         button1 = ttk.Button(self,
                             command=lambda: controller.show_frame(StartPage))
         button1 = set_btn_bg(button1, "Images/start_again_btn.png")
-        button1.place(x=220,y=320)
+        button1.place(x=200,y=320)
 
         # quit button
         button2 = ttk.Button(self,
                              command=quit)
         button2 = set_btn_bg(button2, "Images/quit_btn.png")
-        button2.place(x=320 , y=320)
+        button2.place(x=310 , y=320)
 
 
 
