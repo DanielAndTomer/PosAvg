@@ -1,6 +1,7 @@
 
 
 ---------------------------------------------------------------------------------
+<<<<<<< HEAD
 2017-07-31 18:40:18.569099  Script opened
 
 2017-07-31 18:40:24.019384  [ERROR]: Unaccepted value - Negative values
@@ -173,3 +174,35 @@
 
 2017-08-01 14:21:40.055886  [DEBUG]: Values has been past to the script.
 2017-08-01 14:21:45.070942  [ERROR]: Connection error - Unable to connect to Novatel.
+=======
+2017-08-01 14:34:42.526710  Script opened
+2017-08-01 14:34:55.180335  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 15:44:01.601242  Script opened
+
+
+---------------------------------------------------------------------------------
+2017-08-01 15:44:07.215453  Script opened
+2017-08-01 15:44:18.636865  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:27.491289  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:28.683161  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:29.851791  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:30.724675  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:31.500646  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:32.379784  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:44:33.204284  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-08-01 15:46:22.954329  Script opened
+2017-08-01 15:46:32.478447  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:34.493771  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:35.245124  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:36.252110  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:38.206457  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:41.444952  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:45.961658  [ERROR]: Unaccepted value - string or float has passed
+2017-08-01 15:46:47.170998  [ERROR]: Unaccepted value - string or float has passed
+>>>>>>> 4ee5d87213ca81f0e947caf9ac8d25873d22c7f5
