@@ -1,0 +1,175 @@
+
+
+---------------------------------------------------------------------------------
+2017-07-31 18:40:18.569099  Script opened
+
+2017-07-31 18:40:24.019384  [ERROR]: Unaccepted value - Negative values
+
+
+---------------------------------------------------------------------------------
+2017-07-31 18:40:30.844750  Script opened
+
+2017-07-31 18:40:34.314162  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-07-31 18:40:42.683930  Script opened
+
+2017-07-31 18:40:47.735587  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-07-31 18:53:42.501885  Script opened
+
+2017-07-31 18:53:52.025552  [DEBUG]: Values has been past to the script.
+2017-07-31 18:53:57.034391  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-07-31 18:59:11.612849  Script opened
+
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:03:05.341075  Script opened
+
+2017-07-31 19:03:08.594168  [DEBUG]: Values has been past to the script.
+2017-07-31 19:03:13.603672  [ERROR]: Connection error - Enable to connect to Novatel.
+2017-07-31 19:03:13.603672  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:04:12.138771  Script opened
+
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:05:39.767029  Script opened
+
+2017-07-31 19:05:43.917373  [DEBUG]: Values has been past to the script.
+2017-07-31 19:05:48.922878  [ERROR]: Connection error - Enable to connect to Novatel.
+2017-07-31 19:05:48.922878  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:06:22.803237  Script opened
+
+2017-07-31 19:06:26.481209  [DEBUG]: Values has been past to the script.
+2017-07-31 19:06:31.492463  [ERROR]: Connection error - Enable to connect to Novatel.
+2017-07-31 19:06:31.492463  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:10:34.122891  Script opened
+
+2017-07-31 19:10:38.693380  [DEBUG]: Values has been past to the script.
+2017-07-31 19:10:43.699802  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-07-31 19:12:36.516725  Script opened
+
+2017-07-31 19:12:40.477106  [DEBUG]: Values has been past to the script.
+2017-07-31 19:12:45.494430  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 09:16:22.028230  Script opened
+
+2017-08-01 09:16:29.149934  [DEBUG]: Values has been past to the script.
+2017-08-01 09:16:34.167274  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:31:15.292457  Script opened
+
+2017-08-01 13:31:21.659381  [DEBUG]: Values has been past to the script.
+2017-08-01 13:31:26.674784  [ERROR]: Connection error - Enable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:37:51.248544  Script opened
+
+2017-08-01 13:38:11.186686  [DEBUG]: Values has been past to the script.
+2017-08-01 13:38:16.194920  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:48:30.801634  Script opened
+
+2017-08-01 13:48:33.792007  [DEBUG]: Values has been past to the script.
+2017-08-01 13:48:38.811766  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:55:56.724563  Script opened
+
+2017-08-01 13:55:59.256088  [ERROR]: Unaccepted value - string or float has passed
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:56:15.465384  Script opened
+
+2017-08-01 13:56:21.824479  [DEBUG]: Values has been past to the script.
+2017-08-01 13:56:26.833741  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 13:57:53.264620  Script opened
+
+2017-08-01 13:57:56.708907  [DEBUG]: Values has been past to the script.
+2017-08-01 13:58:01.715554  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:04:38.288160  Script opened
+
+2017-08-01 14:04:42.068809  [DEBUG]: Values has been past to the script.
+2017-08-01 14:04:47.085021  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:07:13.351000  Script opened
+
+2017-08-01 14:07:19.069670  [DEBUG]: Values has been past to the script.
+2017-08-01 14:07:24.084650  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:09:36.334688  Script opened
+
+2017-08-01 14:09:40.948495  [DEBUG]: Values has been past to the script.
+2017-08-01 14:09:45.951596  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:10:13.015358  Script opened
+
+2017-08-01 14:10:16.919243  [DEBUG]: Values has been past to the script.
+2017-08-01 14:10:21.933069  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:16:12.523967  Script opened
+
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:18:17.868086  Script opened
+
+2017-08-01 14:18:24.086292  [DEBUG]: Values has been past to the script.
+2017-08-01 14:18:29.101998  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:20:30.262707  Script opened
+
+2017-08-01 14:20:45.086780  [DEBUG]: Values has been past to the script.
+2017-08-01 14:20:50.094240  [ERROR]: Connection error - Unable to connect to Novatel.
+
+
+---------------------------------------------------------------------------------
+2017-08-01 14:21:30.539340  Script opened
+
+2017-08-01 14:21:40.055886  [DEBUG]: Values has been past to the script.
+2017-08-01 14:21:45.070942  [ERROR]: Connection error - Unable to connect to Novatel.
