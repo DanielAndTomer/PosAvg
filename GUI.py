@@ -9,7 +9,8 @@ from _thread import start_new_thread
 import threading
 
 avg.logOpen()
-def startDrone():
+def droneAnimation(flag):
+    active=3
     class myThread (threading.Thread):
         def __init__(self, threadID, name, counter):
             threading.Thread.__init__(self)
@@ -20,8 +21,15 @@ def startDrone():
             print ("Starting " + self.name)
             animate ()
             print ("Exiting " + self.name)
+        def stop(self):
+            thread1.daemon = True
+            active= 0
+            animate ()
+            print (active)
+            
 
     def animate ():
+        print (active)
         imagelist=[]
         for i in range (1,76):
             imagelist.append('Images/drone ('+str(i)+').gif')
@@ -42,6 +50,7 @@ def startDrone():
         x=0    
         def recgif (list,i):
             if i==75:
+                canvas.delete(ALL)
                 return None
             canvas.delete(ALL)
             canvas.create_image(width/2.0, height/2.0, image=list[i])
@@ -50,12 +59,16 @@ def startDrone():
             i+=1
             recgif(list,i)
                
-        while x<100:
+        while active > 1:
             recgif(giflist,0)        
              
 
     thread1 = myThread(1,"Thread-1", 1)
-    thread1.start()
+    if flag==True:
+        thread1.start()
+    else:       
+        print ("false")
+        
 
 def background_init(frame):
     load = Image.open("Images/background.png")
@@ -113,20 +126,24 @@ class StartPage(tk.Frame):
             opt=getV()
             print(opt)
             print(txtBox.get())
+            COM=txtBox2.get()
             try:
                 value = int(txtBox.get())
                 controller.show_frame(inProgress)
-                startDrone()
+                droneAnimation(True)
                 if value>0:
-                    try:
-                        avg.start_pos(opt,value,"COM10")
-                    except Exception:
+                    pross=avg.start_pos(opt,value,COM)
+                    if not pross:                     
                         controller.show_frame(Stopped)
+                        droneAnimation(False)
+                        print ("else")
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
+                    #droneAnimation(False)
                     controller.show_frame(Stopped)
             except Exception:
                 avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
+                droneAnimation(False)
                 controller.show_frame(Stopped)
 
         tk.Frame.__init__(self, parent)
@@ -180,8 +197,9 @@ class StartPage(tk.Frame):
         txtLable2=tk.Label(self, text="COM Number:")
         txtLable2.config(font="Arial 9 bold underline", bg="white")
         txtLable2.place(x=178, y=230)
-        txtBox=tk.Entry(self)
-        txtBox.place(x=270, y=230)
+        txtBox2=tk.Entry(self)
+        txtBox2.insert(END, 'COM10')
+        txtBox2.place(x=270, y=230)
 
 
         # start button
@@ -234,6 +252,8 @@ class inProgress(tk.Frame):
 
 class Stopped(tk.Frame):
     def __init__(self, parent, controller):
+
+        
         tk.Frame.__init__(self, parent)
 
         background_init(self)
@@ -256,6 +276,11 @@ class Stopped(tk.Frame):
                              command=quit)
         button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=320 , y=320)
+
+        droneAnimation(False)
+        
+        
+    
 
 
 
