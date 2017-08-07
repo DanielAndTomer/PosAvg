@@ -10,70 +10,71 @@ import threading
 avg.logOpen()
 tomerFS = True
 
-
-def worker():
-    global tomerFS
-    imagelist=[]
-    for i in range (1,76):
-        print (i)
-        imagelist.append('Images/drone ('+str(i)+').gif')
-   
-            # extract width and height info
-    print (imagelist[0])
-    print("0000000000000000000000000000000000000\n")
-    photo = ImageTk.PhotoImage(file=imagelist[0])
-    print("1111111111111111111111111111111111111\n")
-    width = photo.width()
-    print("2222222222222222222222222222222222222\n")
-    height = photo.height()
-    print("33333333333333333333333333333333333333\n")
-    canvas = tk.Canvas(width=width, height=height,highlightthickness=0)
-    canvas.place(x=200, y=160)
-    canvas.configure(background='white')
-        # create a list of image objects
-    giflist = []
-    for imagefile in imagelist:
-        print("GIF List CREATING \n")
-        photo = ImageTk.PhotoImage(file=imagefile)
-        giflist.append(photo)
-        # loop through the gif image objects for a while
-            
-    def recgif (list,i):
-        global tomerFS
-        if i==75 or tomerFS==False:
-            print("delete all")
-            canvas.delete(ALL)
-            return None
-        canvas.delete(ALL)
-        canvas.create_image(width/2.0, height/2.0, image=list[i])
-        canvas.update()
-        time.sleep(0.04)
-        i+=1
-        recgif(list,i)
+class myThread (threading.Thread): 
+    def __init__(self, threadID, name, counter):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+        self.active=True
+        
+    def run(self):
+        print ("Starting " + self.name)
+        
+        imagelist=[]
+        for i in range (1,76):
+            imagelist.append('Images/drone ('+str(i)+').gif')
                
-    while tomerFS:
-        print(threading.current_thread().getName(), 'Starting')        
-        recgif(giflist,0)
-        time.sleep(0.2)
-
-    if tomerFS==False:
-        print("tomer fs")
-        canvas.delete(ALL)
-        canvas.update()
+                   # extract width and height info
+        photo = ImageTk.PhotoImage(file=imagelist[0])
+        width = photo.width()
+        height = photo.height()
+        canvas = tk.Canvas(width=width, height=height,highlightthickness=0,)
+        canvas.place(x=200, y=160)
+        canvas.configure(background='white')
+            # create a list of image objects
+        giflist = []
+        for imagefile in imagelist:
+            photo = ImageTk.PhotoImage(file=imagefile)
+            giflist.append(photo)
+            # loop through the gif image objects for a while
             
+        def recgif (list,i):
+            global tomerFS
+            if i==75 or tomerFS==False:
+                print("delete all")
+                canvas.delete(ALL)
+                return None
+            canvas.delete(ALL)
+            canvas.create_image(width/2.0, height/2.0, image=list[i])
+            canvas.update()
+            time.sleep(0.04)
+            i+=1
+            recgif(list,i)
+               
+        while tomerFS:
+            print("I'm working now!")
+            recgif(giflist,0)
 
+        if tomerFS==False:
+            print("tomer fs")
+            canvas.delete(ALL)
+            canvas.update()            
 
+        print ("Exiting " + self.name)
 
-w = threading.Thread(name='worker', target=worker)
-
-
+        
 
 def droneAnimation(flag):
     global tomerFS
+    print("sssssss")
+    thread1 = myThread(1,"Thread-1", 1)
+    print("kkkkkkk")
     if flag==True:
         print("start")
-        w.start()
+        thread1.start()
     else:
+        thread1.active=False
         tomerFS=False
         print("stop")
         
@@ -138,15 +139,13 @@ class StartPage(tk.Frame):
             print(opt)
             print(txtBox.get())
             COM=txtBox2.get()
-            print (COM)
             try:
-                value = int(txtBox.get())
-                print(value)
+                value = int(txtBdroneAnimationox.get())
                 if value>0:
                     pross=avg.start_pos(opt,value,COM)
-                    print("start script")
-                    if pross==None:                     
+                    if not pross:                     
                         controller.show_frame(Stopped)
+                        tomerFS=False
                         droneAnimation(False)
                         print ("else")
                 else:

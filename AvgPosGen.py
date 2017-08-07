@@ -3,7 +3,7 @@ import time
 import re
 from datetime import datetime
 import sys
-
+f = open("POSAVE LOG.txt", "a")
 
 def logOpen():
     f = open("POSAVE LOG.txt", "a")
@@ -47,7 +47,7 @@ def readValueOK(ser): # Reads Novatel O.K commands
     return line
 
 def timeSet(opt, time_value):       #converts to hours and seconds. Return list - [S,H]
-
+    print("start AvgPosGen def timeSet")
     #errors setup
     err40_400 = '\n****************************************\n*** Please enter number between 40-400 ***\n****************************************\n'
     err1_60 = '\n****************************************\n*** Please enter number between 1-60 ***\n****************************************\n'
@@ -86,8 +86,10 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
         timeList.append(waitTime)
         return timeList
     elif opt == 3:
+        print ("I'm In 3")
         try:
             waitTime = float(time_value)
+            print(waitTime)
             if 40 <= waitTime <= 400:
                 flag = 0
             else:
@@ -95,11 +97,14 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
         except ValueError:
             print(err40_400)
             pass
+        print("I passed")
         f.write(str(datetime.now()) + "  " + 'User start pos for ' + str(waitTime) + ' Seconds\n')
+        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         timeInSecs = waitTime
         waitTime = round(waitTime / 60 / 60, 6)
         timeList.append(timeInSecs)
         timeList.append(waitTime)
+        print (timeList)
         return timeList
     else:
         print('not good')
@@ -131,27 +136,34 @@ def start_pos(opt,time_value,COM):
         time.sleep(time_in_secs + 1) #Wait POS time then check if finished
         ser.write(b'log bestpos\n')
         logWrite('  [DEBUG]: log bestpos\n')
-        time.sleep(1)
-        value=readValue(ser)
-        logWrite("  [DEBUG]: "+value+"\n")
-        if 'FIXEDPOS' in value:
-           ser.write(b'fix none\n')
-           time.sleep(1)
-           dd=value.split("FIXEDPOS ",1)[1] #split until the first cordinate
-           cordinates='fix position '+' '.join(dd.split()[:3])+'\n' #get only 3 first words
-           getOK=readValueOK(ser)
-           print (str(getOK))
-           if '<OK' in getOK:
-               ser.write(bytes(cordinates, encoding="ascii"))
-               logWrite("    [DEBUG]:"+cordinates)
+        getOK=readValueOK(ser)
+        if '<OK' in getOK:
+            time.sleep(1)
+            value=readValue(ser)
+            logWrite("  [DEBUG]: "+value+"\n")
+            if 'FIXEDPOS' in value:
+               ser.write(b'fix none\n')
                time.sleep(1)
-               ser.write(b'saveconfig\n')
-               logWrite('    [DEBUG]: saveconfig\n')
-               logWrite('    [DEBUG]: Finished\n')
-           else:
-               logWrite('    [WARRNING]: Something went worng, starting again...\n.')
+               dd=value.split("FIXEDPOS ",1)[1] #split until the first cordinate
+               cordinates='fix position '+' '.join(dd.split()[:3])+'\n' #get only 3 first words
+               getOK=readValueOK(ser)
+               print (str(getOK))
+               if '<OK' in getOK:
+                   ser.write(bytes(cordinates, encoding="ascii"))
+                   logWrite("    [DEBUG]:"+cordinates)
+                   time.sleep(1)
+                   ser.write(b'saveconfig\n')
+                   logWrite('    [DEBUG]: saveconfig\n')
+                   logWrite('    [DEBUG]: Finished\n')
+               else:
+                   logWrite('    [WARRNING]: Something went worng, starting again...\n.')
+            else:
+                logWrite('    [WARRNING]: Sorry you need to wait some more time.')
+
         else:
-            logWrite('    [WARRNING]: Sorry you need to wait some more time.')
+            logWrite('    [ERROR]: unable log bestpos...\n.')
+            return
+        
 
         logWrite('---------------------------------------------------------------------------------\n')
         ser.close()
