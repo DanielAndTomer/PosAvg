@@ -6,78 +6,19 @@ import time
 #from AnimatedGif import *
 import AvgPosGen as avg
 from _thread import start_new_thread
+from multiprocessing import Process
 import threading
 avg.logOpen()
-tomerFS = True
+globalFlag = True
 
-class myThread (threading.Thread): 
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.counter = counter
-        self.active=True
-        
-    def run(self):
-        print ("Starting " + self.name)
-        
-        imagelist=[]
-        for i in range (1,76):
-            imagelist.append('Images/drone ('+str(i)+').gif')
-               
-                   # extract width and height info
-        photo = ImageTk.PhotoImage(file=imagelist[0])
-        width = photo.width()
-        height = photo.height()
-        canvas = tk.Canvas(width=width, height=height,highlightthickness=0,)
-        canvas.place(x=200, y=160)
-        canvas.configure(background='white')
-            # create a list of image objects
-        giflist = []
-        for imagefile in imagelist:
-            photo = ImageTk.PhotoImage(file=imagefile)
-            giflist.append(photo)
-            # loop through the gif image objects for a while
-            
-        def recgif (list,i):
-            global tomerFS
-            if i==75 or tomerFS==False:
-                print("delete all")
-                canvas.delete(ALL)
-                return None
-            canvas.delete(ALL)
-            canvas.create_image(width/2.0, height/2.0, image=list[i])
-            canvas.update()
-            time.sleep(0.04)
-            i+=1
-            recgif(list,i)
-               
-        while tomerFS:
-            print("I'm working now!")
-            recgif(giflist,0)
-
-        if tomerFS==False:
-            print("tomer fs")
-            canvas.delete(ALL)
-            canvas.update()            
-
-        print ("Exiting " + self.name)
-
-        
-
-def droneAnimation(flag):
-    global tomerFS
-    print("sssssss")
-    thread1 = myThread(1,"Thread-1", 1)
-    print("kkkkkkk")
-    if flag==True:
-        print("start")
-        thread1.start()
-    else:
-        thread1.active=False
-        tomerFS=False
-        print("stop")
-        
+def run1():
+    while globalFlag == True:
+        time.sleep(0.5)
+        print ("func 1")
+def run2():
+    while True:
+        time.sleep(0.5)
+        print ("func 2")
         
 
 def background_init(frame):
@@ -133,20 +74,27 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
 
         def onClick_start ():
+            global globalFlag
             controller.show_frame(inProgress)
-            droneAnimation(True)
+            t=threading.Thread(target=run1)
+            t.start()
+            x=0
+            while x<10:
+                print (x)
+                time.sleep(1)
+                x+=1
+            globalFlag=False
             opt=getV()
             print(opt)
             print(txtBox.get())
             COM=txtBox2.get()
             try:
-                value = int(txtBdroneAnimationox.get())
+                value = int(txtBox.get())
                 if value>0:
                     pross=avg.start_pos(opt,value,COM)
                     if not pross:                     
                         controller.show_frame(Stopped)
-                        tomerFS=False
-                        droneAnimation(False)
+                        globalFlag=False
                         print ("else")
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
@@ -156,7 +104,7 @@ class StartPage(tk.Frame):
                 avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
                 droneAnimation(False)
                 print("tttttttttttt")
-                tomerFS=False
+                globalFlag=False
                 controller.show_frame(Stopped)
 
         tk.Frame.__init__(self, parent)
@@ -303,4 +251,6 @@ app = AvgPos()
 app.minsize(600,450)
 app.maxsize(600,450)
 
+
 app.mainloop()
+
