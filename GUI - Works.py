@@ -11,14 +11,34 @@ import threading
 avg.logOpen()
 globalFlag = True
 
-def run1():
+def gifStart():
+    global globalFlag
+    imagelist=[]
+    for i in range (1,76):
+        imagelist.append('Images/drone ('+str(i)+').gif')
+            # extract width and height info
+    photo = ImageTk.PhotoImage(file=imagelist[0])
+    width = photo.width()
+    height = photo.height()
+    canvas = tk.Canvas(width=width, height=height,highlightthickness=0)
+    canvas.place(x=200, y=160)
+    canvas.configure(background='white')
+        # create a list of image objects
+    giflist = []
+    for imagefile in imagelist:
+        photo = ImageTk.PhotoImage(file=imagefile)
+        giflist.append(photo)
+        # loop through the gif image objects for a while
+
     while globalFlag == True:
-        time.sleep(0.5)
-        print ("func 1")
-def run2():
-    while True:
-        time.sleep(0.5)
-        print ("func 2")
+        for gif in giflist:
+            canvas.delete(ALL)
+            canvas.create_image(width/2.0, height/2.0, image=gif)
+            canvas.update()
+            time.sleep(0.04)
+        print ("cycle")
+    canvas.place_forget()
+    return None
         
 
 def background_init(frame):
@@ -76,14 +96,8 @@ class StartPage(tk.Frame):
         def onClick_start ():
             global globalFlag
             controller.show_frame(inProgress)
-            t=threading.Thread(target=run1)
+            t=threading.Thread(target=gifStart)
             t.start()
-            x=0
-            while x<10:
-                print (x)
-                time.sleep(1)
-                x+=1
-            globalFlag=False
             opt=getV()
             print(opt)
             print(txtBox.get())
@@ -95,15 +109,14 @@ class StartPage(tk.Frame):
                     if not pross:                     
                         controller.show_frame(Stopped)
                         globalFlag=False
-                        print ("else")
+                        
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
                     #droneAnimation(False)
+                    globalFlag=False
                     controller.show_frame(Stopped)
             except Exception:
                 avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
-                droneAnimation(False)
-                print("tttttttttttt")
                 globalFlag=False
                 controller.show_frame(Stopped)
 
