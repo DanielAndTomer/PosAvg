@@ -39,6 +39,9 @@ def gifStart():
         print ("cycle")
     canvas.place_forget()
     return None
+
+def startPos(opt,value,COM):
+    pross=avg.start_pos(opt,value,COM)
         
 
 def background_init(frame):
@@ -105,11 +108,8 @@ class StartPage(tk.Frame):
             try:
                 value = int(txtBox.get())
                 if value>0:
-                    pross=avg.start_pos(opt,value,COM)
-                    if not pross:                     
-                        controller.show_frame(Stopped)
-                        globalFlag=False
-                        
+                    t1=threading.Thread(target=startPos,args=(opt,value,COM))
+                    t1.start()                        
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
                     #droneAnimation(False)

@@ -133,8 +133,9 @@ def start_pos(opt,time_value,COM):
         c='posave on '+str(waitTime)+' 0.5 0.5'+'\n'
         logWrite("  [DEBUG]: "+c)
         ser.write(bytes(c, encoding="ascii"))
-        time.sleep(time_in_secs + 1) #Wait POS time then check if finished
+        #time.sleep(time_in_secs + 1) #Wait POS time then check if finished
         ser.write(b'log bestpos\n')
+        time.sleep(3)
         logWrite('  [DEBUG]: log bestpos\n')
         getOK=readValueOK(ser)
         if '<OK' in getOK:
