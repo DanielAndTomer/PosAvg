@@ -6,77 +6,49 @@ import time
 #from AnimatedGif import *
 import AvgPosGen as avg
 from _thread import start_new_thread
+from multiprocessing import Process
 import threading
 avg.logOpen()
-tomerFS = True
+globalFlag = True
 
+def quit():
+    print (1111)
+    
 
-def worker():
-    global tomerFS
+def gifStart():
+    global globalFlag
     imagelist=[]
     for i in range (1,76):
-        print (i)
         imagelist.append('Images/drone ('+str(i)+').gif')
-   
             # extract width and height info
-    print (imagelist[0])
-    print("0000000000000000000000000000000000000\n")
     photo = ImageTk.PhotoImage(file=imagelist[0])
-    print("1111111111111111111111111111111111111\n")
     width = photo.width()
-    print("2222222222222222222222222222222222222\n")
     height = photo.height()
-    print("33333333333333333333333333333333333333\n")
     canvas = tk.Canvas(width=width, height=height,highlightthickness=0)
     canvas.place(x=200, y=160)
     canvas.configure(background='white')
         # create a list of image objects
     giflist = []
     for imagefile in imagelist:
-        print("GIF List CREATING \n")
         photo = ImageTk.PhotoImage(file=imagefile)
         giflist.append(photo)
         # loop through the gif image objects for a while
-            
-    def recgif (list,i):
-        global tomerFS
-        if i==75 or tomerFS==False:
-            print("delete all")
+
+    while globalFlag == True:
+        for gif in giflist:
             canvas.delete(ALL)
-            return None
-        canvas.delete(ALL)
-        canvas.create_image(width/2.0, height/2.0, image=list[i])
-        canvas.update()
-        time.sleep(0.04)
-        i+=1
-        recgif(list,i)
-               
-    while tomerFS:
-        print(threading.current_thread().getName(), 'Starting')        
-        recgif(giflist,0)
-        time.sleep(0.2)
+            canvas.create_image(width/2.0, height/2.0, image=gif)
+            canvas.update()
+            time.sleep(0.04)
+        print ("cycle")
+    canvas.place_forget()
+    return None
 
-    if tomerFS==False:
-        print("tomer fs")
-        canvas.delete(ALL)
-        canvas.update()
-            
-
-
-
-w = threading.Thread(name='worker', target=worker)
-
-
-
-def droneAnimation(flag):
-    global tomerFS
-    if flag==True:
-        print("start")
-        w.start()
-    else:
-        tomerFS=False
-        print("stop")
-        
+def startPos(opt,value,COM):
+    global globalFlag
+    pross=avg.start_pos(opt,value,COM)
+    if pross==None:
+        globalFlag=False
         
 
 def background_init(frame):
@@ -132,32 +104,28 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
 
         def onClick_start ():
+            global globalFlag
             controller.show_frame(inProgress)
-            droneAnimation(True)
+            t=threading.Thread(target=gifStart)
+            t.start()
             opt=getV()
             print(opt)
             print(txtBox.get())
             COM=txtBox2.get()
-            print (COM)
             try:
                 value = int(txtBox.get())
-                print(value)
                 if value>0:
-                    pross=avg.start_pos(opt,value,COM)
-                    print("start script")
-                    if pross==None:                     
-                        controller.show_frame(Stopped)
-                        droneAnimation(False)
-                        print ("else")
+                    t1=threading.Thread(target=startPos,args=(opt,value,COM))
+                    t1.start()
+                    
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
                     #droneAnimation(False)
+                    globalFlag=False
                     controller.show_frame(Stopped)
             except Exception:
                 avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
-                droneAnimation(False)
-                print("tttttttttttt")
-                tomerFS=False
+                globalFlag=False
                 controller.show_frame(Stopped)
 
         tk.Frame.__init__(self, parent)
@@ -304,4 +272,6 @@ app = AvgPos()
 app.minsize(600,450)
 app.maxsize(600,450)
 
+
 app.mainloop()
+

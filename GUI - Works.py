@@ -41,7 +41,10 @@ def gifStart():
     return None
 
 def startPos(opt,value,COM):
+    global globalFlag
     pross=avg.start_pos(opt,value,COM)
+    if pross==None:
+        globalFlag=False
         
 
 def background_init(frame):
@@ -109,7 +112,8 @@ class StartPage(tk.Frame):
                 value = int(txtBox.get())
                 if value>0:
                     t1=threading.Thread(target=startPos,args=(opt,value,COM))
-                    t1.start()                        
+                    t1.start()
+                    
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
                     #droneAnimation(False)

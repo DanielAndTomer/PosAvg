@@ -25,7 +25,7 @@ def readValue(ser): # Reads Novatel commands
         # Read a line and convert it from b'xxx\r\n' to xxx
         char = ser.read().decode('utf-8')
         line += char
-        if char == '\r':
+        if char == '\n':
             num+=1
             line += ' '
     print ('DEBUG: '+line)
@@ -133,14 +133,13 @@ def start_pos(opt,time_value,COM):
         c='posave on '+str(waitTime)+' 0.5 0.5'+'\n'
         logWrite("  [DEBUG]: "+c)
         ser.write(bytes(c, encoding="ascii"))
-        #time.sleep(time_in_secs + 1) #Wait POS time then check if finished
+        time.sleep(time_in_secs + 1) #Wait POS time then check if finished
         ser.write(b'log bestpos\n')
-        time.sleep(3)
         logWrite('  [DEBUG]: log bestpos\n')
-        getOK=readValueOK(ser)
+        getOK=readValue(ser)
         if '<OK' in getOK:
             time.sleep(1)
-            value=readValue(ser)
+            value=getOK
             logWrite("  [DEBUG]: "+value+"\n")
             if 'FIXEDPOS' in value:
                ser.write(b'fix none\n')
@@ -156,10 +155,11 @@ def start_pos(opt,time_value,COM):
                    ser.write(b'saveconfig\n')
                    logWrite('    [DEBUG]: saveconfig\n')
                    logWrite('    [DEBUG]: Finished\n')
+                   ser.close()
                else:
                    logWrite('    [WARRNING]: Something went worng, starting again...\n.')
             else:
-                logWrite('    [WARRNING]: Sorry you need to wait some more time.')
+                logWrite('    [WARRNING]: Sorry you need to wait some more time.\n')
 
         else:
             logWrite('    [ERROR]: unable log bestpos...\n.')
@@ -168,3 +168,4 @@ def start_pos(opt,time_value,COM):
 
         logWrite('---------------------------------------------------------------------------------\n')
         ser.close()
+        return None
