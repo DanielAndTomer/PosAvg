@@ -122,7 +122,7 @@ def start_pos(opt,time_value,COM):
             logWrite("  [DEBUG]: Connected to Novatel.\n") # DEBUG MASSEGE
         except Exception:
             logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE
-            return None
+            return
             
 
         time_list = timeSet(opt,time_value)
@@ -153,16 +153,17 @@ def start_pos(opt,time_value,COM):
                    logWrite("    [DEBUG]:"+cordinates)
                    time.sleep(1)
                    ser.write(b'saveconfig\n')
-                   logWrite('    [DEBUG]: saveconfig\n')
-                   logWrite('    [DEBUG]: Finished\n')
+                   logWrite('   [DEBUG]: saveconfig\n')
+                   logWrite('   [DEBUG]: Finished\n')
                    ser.close()
+                   return True
                else:
-                   logWrite('    [WARRNING]: Something went worng, starting again...\n.')
+                   logWrite('   [WARRNING]: Something went worng, starting again...\n.')
             else:
-                logWrite('    [WARRNING]: Sorry you need to wait some more time.\n')
+                logWrite('  [WARRNING]: Sorry you need to wait some more time.\n')
 
         else:
-            logWrite('    [ERROR]: unable log bestpos...\n.')
+            logWrite('  [ERROR]: unable log bestpos...\n.')
             return
         
 
