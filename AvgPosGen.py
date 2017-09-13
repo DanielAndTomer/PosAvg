@@ -86,7 +86,6 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
         timeList.append(waitTime)
         return timeList
     elif opt == 3:
-        print ("I'm In 3")
         try:
             waitTime = float(time_value)
             print(waitTime)
@@ -97,24 +96,19 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
         except ValueError:
             print(err40_400)
             pass
-        print("I passed")
         f.write(str(datetime.now()) + "  " + 'User start pos for ' + str(waitTime) + ' Seconds\n')
-        print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
         timeInSecs = waitTime
         waitTime = round(waitTime / 60 / 60, 6)
         timeList.append(timeInSecs)
         timeList.append(waitTime)
-        print (timeList)
         return timeList
     else:
-        print('not good')
+        print('Error when convert time')
+        logWrite("  [ERROR]: Error when converting selected time\n")
 
 def start_pos(opt,time_value,COM):
-
     logWrite("  [DEBUG]: Values has been past to the script.\n") # DEBUG MASSEGE
-    
     with serial.Serial() as ser:
-
         ser.baudrate = 115200
         ser.port = COM
         try:
@@ -122,18 +116,15 @@ def start_pos(opt,time_value,COM):
             logWrite("  [DEBUG]: Connected to Novatel.\n") # DEBUG MASSEGE
         except Exception:
             logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE
-            return None
-            
-
+            return None  
         time_list = timeSet(opt,time_value)
         time_in_secs=time_list[0]
         waitTime=time_list[1]
         print(waitTime)
-
         c='posave on '+str(waitTime)+' 0.5 0.5'+'\n'
         logWrite("  [DEBUG]: "+c)
         ser.write(bytes(c, encoding="ascii"))
-        time.sleep(time_in_secs + 1) #Wait POS time then check if finished
+        time.sleep(time_in_secs + 5) #Wait POS time +5secs for safety, then check if finished.
         ser.write(b'log bestpos\n')
         logWrite('  [DEBUG]: log bestpos\n')
         getOK=readValue(ser)
@@ -143,6 +134,7 @@ def start_pos(opt,time_value,COM):
             logWrite("  [DEBUG]: "+value+"\n")
             if 'FIXEDPOS' in value:
                ser.write(b'fix none\n')
+               logWrite('  [DEBUG]: fix none\n')
                time.sleep(1)
                dd=value.split("FIXEDPOS ",1)[1] #split until the first cordinate
                cordinates='fix position '+' '.join(dd.split()[:3])+'\n' #get only 3 first words

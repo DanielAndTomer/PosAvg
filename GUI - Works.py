@@ -11,6 +11,10 @@ import threading
 avg.logOpen()
 globalFlag = True
 
+def quit():
+    quit()
+
+
 def gifStart():
     global globalFlag
     imagelist=[]
