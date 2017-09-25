@@ -124,49 +124,56 @@ def start_pos(opt,time_value,COM):
         waitTime=time_list[1]
         print(waitTime)
         c='posave on '+str(waitTime)+' 0.5 0.5'+'\n'
+        ser.write(bytes(c, encoding="ascii"))		
+        logWrite("  [DEBUG]: "+c)
         getPosaveOK=readValue(ser)
         if '<OK' in getPosaveOK:
-        	value=getPosaveOK
-        	logWrite('  [DEBUG]: '+value+'\n')
-        else:
-        	logWrite('  [ERROR]: Failed to send posave on command\n')		
-        logWrite("  [DEBUG]: "+c)
-        ser.write(bytes(c, encoding="ascii"))
-        time.sleep(time_in_secs + 5) #Wait POS time +5secs for safety, then check if finished.
-        ser.write(b'log bestpos\n')
-        logWrite('  [DEBUG]: log bestpos\n')
-        getOK=readValue(ser)
-        if '<OK' in getOK:
-            time.sleep(1)
-            value=getOK
-            logWrite("  [DEBUG]: "+value+"\n")
-            if 'FIXEDPOS' in value:
-               ser.write(b'fix none\n')
-               logWrite('  [DEBUG]: fix none\n')
-               time.sleep(1)
-               dd=value.split("FIXEDPOS ",1)[1] #split until the first cordinate
-               cordinates='fix position '+' '.join(dd.split()[:3])+'\n' #get only 3 first words
-               getOK=readValueOK(ser)
-               print (str(getOK))
-               if '<OK' in getOK:
-                   ser.write(bytes(cordinates, encoding="ascii"))
-                   logWrite("  [DEBUG]: "+cordinates)
-                   time.sleep(1)
-                   ser.write(b'saveconfig\n')
-                   logWrite('  [DEBUG]: saveconfig\n')
-                   logWrite('  [DEBUG]: Finished\n')
-                   ser.close()
-                   return True
-               else:
-                   logWrite('   [WARRNING]: Something went worng, starting again...\n.')
+            value=getPosaveOK
+            logWrite('  [DEBUG]: Msg from Novatel after sending posave on: '+value+'\n')
+            time.sleep(time_in_secs + 3) #Wait POS time +5secs for safety, then check if finished.
+            ser.write(b'log bestpos\n')
+            logWrite('  [DEBUG]: log bestpos\n')
+            getOK=readValue(ser)
+            if '<OK' in getOK:
+                time.sleep(1)
+                value=getOK
+                logWrite("  [DEBUG] Msg from Novatel after sending log bestpos: "+value+"\n")
+                if 'FIXEDPOS' in value:
+                    ser.write(b'fix none\n')
+                    logWrite('  [DEBUG]: fix none\n')
+                    time.sleep(1)
+                    getOK=readValueOK(ser)
+                    if '<OK' in getOK:
+                        splitTillCordinate=value.split("FIXEDPOS ",1)[1] #split until the first cordinate
+                        cordinates='fix position '+' '.join(splitTillCordinate.split()[:3])+'\n' #get only 3 first words
+                        ser.write(bytes(cordinates, encoding="ascii"))
+                        logWrite("  [DEBUG]: "+cordinates)
+                        time.sleep(1)
+                        getOK=readValueOK(ser)
+                        if '<OK' in getOK:
+                            ser.write(b'saveconfig\n')
+                            logWrite('  [DEBUG]: saveconfig\n')
+                            time.sleep(1)
+                            getOK=readValueOK(ser)
+                            if '<OK' in getOK:
+                                logWrite('  [DEBUG]: Finished\n')
+                                ser.close()
+                                return True
+                            else:
+                                logWrite('   [ERROR]: Cant send saveconfig to Novatel..\n.')                                
+                        else:
+                            logWrite('   [ERROR]: Cant send fix position to Novatel..\n.')
+                    else:
+                        logWrite('   [ERROR]: Something went worng, starting again...\n.')
+                else:
+                    logWrite('  [ERROR]: Sorry you need to wait some more time.\n')
             else:
-                logWrite('  [WARRNING]: Sorry you need to wait some more time.\n')
-
+                logWrite('  [ERROR]: unable log bestpos...\n.')
+                return        	
         else:
-            logWrite('  [ERROR]: unable log bestpos...\n.')
-            return
-        
+            logWrite('  [ERROR]: Failed to send posave on command\n')
 
+        
         logWrite('---------------------------------------------------------------------------------\n')
         ser.close()
         return None
