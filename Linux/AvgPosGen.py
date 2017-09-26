@@ -3,7 +3,12 @@ import time
 import re
 from datetime import datetime
 import sys
+import ctypes
+
 f = open("POSAVE LOG.txt", "a")
+
+def Mbox(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 def logOpen():
     f = open("POSAVE LOG.txt", "a")
@@ -115,7 +120,8 @@ def start_pos(opt,time_value,COM):
             ser.open()
             logWrite("  [DEBUG]: Connected to Novatel.\n") # DEBUG MASSEGE
         except Exception:
-            logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE
+            logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE            
+            Mbox('Error', 'Connection error - Unable to connect to Novatel.', 0)
             return None  
             return
 
@@ -160,7 +166,8 @@ def start_pos(opt,time_value,COM):
                                 ser.close()
                                 return True
                             else:
-                                logWrite('   [ERROR]: Cant send saveconfig to Novatel..\n.')                                
+                                logWrite('   [ERROR]: Cant send saveconfig to Novatel..\n.')
+                                Mbox('Error', 'Cant send saveconfig to Novatel..', 0)
                         else:
                             logWrite('   [ERROR]: Cant send fix position to Novatel..\n.')
                     else:
