@@ -8,13 +8,17 @@ import AvgPosGen as avg
 from _thread import start_new_thread
 from multiprocessing import Process
 import threading
+from tkinter import messagebox as mb
 avg.logOpen()
 globalFlag = False
 toStart = False
 
-def quit():
+def quitapp():
     quit()
 
+def ShowDialog(title, text):
+    t=threading.Thread(target=mb.showerror, args=(title, text))
+    t.start()
 
 def gifStart():
     global globalFlag
@@ -41,7 +45,7 @@ def gifStart():
             canvas.create_image(width/2.0, height/2.0, image=gif)
             canvas.update()
             time.sleep(0.04)
-        print ("cycle")
+##        ##print ("cycle")
     canvas.place_forget()
     return None
 
@@ -114,27 +118,25 @@ class StartPage(tk.Frame):
             global toStart
             global globalFlag
             opt=getV()
-            print(opt)
-            print(txtBox.get())
+            ##print(opt)
+            ##print(txtBox.get())
             COM=txtBox2.get()
             try:
                 value = int(txtBox.get())
                 if value>0:
                     controller.show_frame(inProgress)
-##                    t1=threading.Thread(target=startPos,args=(opt,value,COM))
-##                    t1.start()
                     startPos(opt,value,COM)
-                    
-                    
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
                     #droneAnimation(False)
                     globalFlag=False
                     controller.show_frame(Stopped)
+                    ShowDialog("Error",'Unaccepted value - Negative values')
             except Exception:
                 avg.logWrite("  [ERROR]: Unaccepted value - string or float has passed\n")
                 globalFlag=False
                 controller.show_frame(Stopped)
+                ShowDialog("Error",'Unaccepted value - Enter numbers only,\nPlease follow instructions above!')
 
         tk.Frame.__init__(self, parent)
 
@@ -200,7 +202,7 @@ class StartPage(tk.Frame):
 
         # quit button
         button2 = ttk.Button(self, text="",
-                            command=quit)
+                            command=quitapp)
         button2=set_btn_bg(button2,"Images/quit_btn.png")
         button2.place(x=310 , y=320)
 
@@ -235,7 +237,7 @@ class inProgress(tk.Frame):
 
         # quit button
         button2 = ttk.Button(self, text="Quit",
-                             command=quit)
+                             command=quitapp)
         button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=310 , y=320)
     
@@ -253,9 +255,9 @@ class Stopped(tk.Frame):
         background_init(self)
 
         # "you hav stoped" label:
-        label = tk.Label(self, text="The process has stopped for any reason\n"
+        label = tk.Label(self, text="The process has stopped\n"
                                     "You may close the window, reopen it or press \"try again\"\n"
-                                    "Make sure you enter the right values in your next try...\n\n"
+                                    "Make sure you enter the right values on your next try...\n\n"
                                     "DO NOT CALL US!!!")
         label.config(bg="white", fg="red", font="Times 12 bold")
         label.place(x=120, y=95)
@@ -268,7 +270,7 @@ class Stopped(tk.Frame):
 
         # quit button
         button2 = ttk.Button(self,
-                             command=quit)
+                             command=quitapp)
         button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=310 , y=320)
 
@@ -297,7 +299,7 @@ class Done(tk.Frame):
 
         # quit button
         button2 = ttk.Button(self,
-                             command=quit)
+                             command=quitapp)
         button2 = set_btn_bg(button2, "Images/quit_btn.png")
         button2.place(x=310 , y=320)
 

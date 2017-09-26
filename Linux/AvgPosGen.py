@@ -4,11 +4,18 @@ import re
 from datetime import datetime
 import sys
 import ctypes
+from tkinter import messagebox as mb
+
+import threading
+
+
 
 f = open("POSAVE LOG.txt", "a")
 
-def Mbox(title, text, style):
-    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+def ShowDialog(title, text):
+    t=threading.Thread(target=mb.showerror, args=(title, text))
+    t.start()
+    
 
 def logOpen():
     f = open("POSAVE LOG.txt", "a")
@@ -33,7 +40,7 @@ def readValue(ser): # Reads Novatel commands
         if char == '\n':
             num+=1
             line += ' '
-    print ('DEBUG: '+line)
+    ####print ('DEBUG: '+line)
     return line
 
 def readValueOK(ser): # Reads Novatel O.K commands
@@ -48,15 +55,15 @@ def readValueOK(ser): # Reads Novatel O.K commands
         if char == '\n':
             num+=1
             line += ' '
-    print ('DEBUG2: '+line)
+    ##print ('DEBUG2: '+line)
     return line
 
 def timeSet(opt, time_value):       #converts to hours and seconds. Return list - [S,H]
-    print("start AvgPosGen def timeSet")
+    ##print("start AvgPosGen def timeSet")
     #errors setup
-    err40_400 = '\n****************************************\n*** Please enter number between 40-400 ***\n****************************************\n'
-    err1_60 = '\n****************************************\n*** Please enter number between 1-60 ***\n****************************************\n'
-    err01_48 = '\n****************************************\n*** Please enter number between 0.1-48 ***\n****************************************\n'
+    err40_400 = 'Please enter number between 40-40'
+    err1_60 = 'Please enter number between 1-60'
+    err01_48 = 'Please enter number between 0.1-48'
     
     timeList = []
     if opt == 1:
@@ -65,9 +72,9 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
             if 0.1 <= waitTime <= 48:
                 flag = 0
             else:
-                print(err01_48)
+                ShowDialog("Error",err01_48)
         except ValueError:
-            print(err01_48)
+            ShowDialog("Error",err01_48)
             pass
         f.write(str(datetime.now()) + "  " + 'User start pos for ' + str(waitTime) + ' Hours\n')
         timeInSecs = (waitTime * 60) * 60  # Convert time in Hours to seconds
@@ -80,9 +87,9 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
             if 1 <= waitTime <= 60:
                 flag = 0
             else:
-                print(err1_60)
+                ShowDialog("Error",err1_60)
         except ValueError:
-            print(err1_60)
+            ShowDialog("Error",err1_60)
             pass
         f.write(str(datetime.now()) + "  " + 'User start pos for ' + str(waitTime) + ' Minutes\n')
         timeInSecs = waitTime * 60  # Convert time in Minutes to seconds
@@ -93,13 +100,13 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
     elif opt == 3:
         try:
             waitTime = float(time_value)
-            print(waitTime)
+            ##print(waitTime)
             if 40 <= waitTime <= 400:
                 flag = 0
             else:
-                print(err40_400)
+                ShowDialog("Error",err40_400)
         except ValueError:
-            print(err40_400)
+            ShowDialog("Error",err40_400)
             pass
         f.write(str(datetime.now()) + "  " + 'User start pos for ' + str(waitTime) + ' Seconds\n')
         timeInSecs = waitTime
@@ -108,7 +115,7 @@ def timeSet(opt, time_value):       #converts to hours and seconds. Return list 
         timeList.append(waitTime)
         return timeList
     else:
-        print('Error when convert time')
+        ShowDialog("Error",'Error when convert time')
         logWrite("  [ERROR]: Error when converting selected time\n")
 
 def start_pos(opt,time_value,COM):
@@ -120,15 +127,15 @@ def start_pos(opt,time_value,COM):
             ser.open()
             logWrite("  [DEBUG]: Connected to Novatel.\n") # DEBUG MASSEGE
         except Exception:
-            logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE            
-            Mbox('Error', 'Connection error - Unable to connect to Novatel.', 0)
+            logWrite("  [ERROR]: Connection error - Unable to connect to Novatel.\n") # DEBUG MASSEGE                       
+            ShowDialog('Error', 'Connection error - Unable to connect to Novatel.')
             return None  
             return
 
         time_list = timeSet(opt,time_value)
         time_in_secs=time_list[0]
         waitTime=time_list[1]
-        print(waitTime)
+        ##print(waitTime)
         c='posave on '+str(waitTime)+' 0.5 0.5'+'\n'
         ser.write(bytes(c, encoding="ascii"))		
         logWrite("  [DEBUG]: "+c)
@@ -167,18 +174,28 @@ def start_pos(opt,time_value,COM):
                                 return True
                             else:
                                 logWrite('   [ERROR]: Cant send saveconfig to Novatel..\n.')
-                                Mbox('Error', 'Cant send saveconfig to Novatel..', 0)
+                                ShowDialog('Error', 'Cant send saveconfig to Novatel..')
+                                return
                         else:
                             logWrite('   [ERROR]: Cant send fix position to Novatel..\n.')
+                            ShowDialog('Error', 'Cant send fix position to Novatel..')
+                            return
                     else:
                         logWrite('   [ERROR]: Something went worng, starting again...\n.')
+                        ShowDialog('Error', 'Something went worng, starting again..')
+                        return
                 else:
                     logWrite('  [ERROR]: Sorry you need to wait some more time.\n')
+                    ShowDialog('Error', 'Sorry you need to wait some more time.')
+                    return
             else:
-                logWrite('  [ERROR]: unable log bestpos...\n.')
+                logWrite('  [ERROR]: Unable to log bestpos...\n.')
+                ShowDialog('Error', 'Unable to log bestpos...')
                 return        	
         else:
             logWrite('  [ERROR]: Failed to send posave on command\n')
+            ShowDialog('Error', 'Failed to send posave on command')
+            return
 
         
         logWrite('---------------------------------------------------------------------------------\n')
