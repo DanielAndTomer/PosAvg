@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
@@ -10,12 +9,11 @@ from _thread import start_new_thread
 from multiprocessing import Process
 import threading
 avg.logOpen()
-globalFlag = True
+globalFlag = False
+toStart = False
 
 def quit():
-    avg.logWrite("  [DEBUG]: User press quit btn\n")
-    app.quit()
-
+    quit()
 
 
 def gifStart():
@@ -49,9 +47,15 @@ def gifStart():
 
 def startPos(opt,value,COM):
     global globalFlag
+    globalFlag=True
     pross=avg.start_pos(opt,value,COM)
+##    pross=True
     if pross==None:
-        globalFlag=False
+        app.show_frame(Stopped)
+    else:
+        app.show_frame(Done)
+    globalFlag=False
+    
         
 
 def background_init(frame):
@@ -81,14 +85,14 @@ class AvgPos(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         #Chief icon:
-        #self.iconbitmap('/Images/chief.ico')
+        self.iconbitmap('Images/chief.ico')
 
         #Window label:
         self.title("Average Position Generator")
 
         self.frames = {}
 
-        for F in (StartPage, inProgress, Stopped):
+        for F in (StartPage, inProgress, Stopped, Done):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -107,10 +111,8 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
 
         def onClick_start ():
+            global toStart
             global globalFlag
-            controller.show_frame(inProgress)
-            t=threading.Thread(target=gifStart)
-            t.start()
             opt=getV()
             print(opt)
             print(txtBox.get())
@@ -118,8 +120,11 @@ class StartPage(tk.Frame):
             try:
                 value = int(txtBox.get())
                 if value>0:
-                    t1=threading.Thread(target=startPos,args=(opt,value,COM))
-                    t1.start()
+                    controller.show_frame(inProgress)
+##                    t1=threading.Thread(target=startPos,args=(opt,value,COM))
+##                    t1.start()
+                    startPos(opt,value,COM)
+                    
                     
                 else:
                     avg.logWrite("  [ERROR]: Unaccepted value - Negative values\n")
@@ -203,9 +208,13 @@ class StartPage(tk.Frame):
 class inProgress(tk.Frame):
     
     def __init__(self, parent, controller):
+        global toStart
         tk.Frame.__init__(self, parent)
 
         background_init(self)
+
+        t=threading.Thread(target=gifStart)
+        t.start()
 
         # in progress label:
         label = tk.Label(self, text="IN PROGRESS ...\n")
@@ -246,13 +255,43 @@ class Stopped(tk.Frame):
         # "you hav stoped" label:
         label = tk.Label(self, text="The process has stopped for any reason\n"
                                     "You may close the window, reopen it or press \"try again\"\n"
-                                    "Make sure you enter the right values in your next try...")
+                                    "Make sure you enter the right values in your next try...\n\n"
+                                    "DO NOT CALL US!!!")
         label.config(bg="white", fg="red", font="Times 12 bold")
         label.place(x=120, y=95)
 
         # start again button
         button1 = ttk.Button(self,
                             command=lambda: controller.show_frame(StartPage))
+        button1 = set_btn_bg(button1, "Images/start_again_btn.png")
+        button1.place(x=200,y=320)
+
+        # quit button
+        button2 = ttk.Button(self,
+                             command=quit)
+        button2 = set_btn_bg(button2, "Images/quit_btn.png")
+        button2.place(x=310 , y=320)
+
+
+class Done(tk.Frame):
+    def __init__(self, parent, controller):
+
+        
+        tk.Frame.__init__(self, parent)
+
+        background_init(self)
+
+        # "you hav stoped" label:
+        label = tk.Label(self, text="ALL DONE\n"
+                                    "See log file for more details\n"
+                                    "If you ran into a problem...\n\n"
+                                    "DO NOT CALL US!!!")
+        label.config(bg="white", fg="red", font="Times 12 bold")
+        label.place(x=210, y=110)
+
+        # start again button
+        button1 = ttk.Button(self,
+                            command=lambda: controller.show_frame(StartPage),state=DISABLED)
         button1 = set_btn_bg(button1, "Images/start_again_btn.png")
         button1.place(x=200,y=320)
 
